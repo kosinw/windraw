@@ -5,4 +5,5 @@ target_sources(windraw
 		"${CMAKE_CURRENT_LIST_DIR}/windraw.hpp"
 		"${CMAKE_CURRENT_LIST_DIR}/spec.hpp"
 		"${CMAKE_CURRENT_LIST_DIR}/style.hpp"
+		"${CMAKE_CURRENT_LIST_DIR}/math.hpp"
 )
