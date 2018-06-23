@@ -1,0 +1,7 @@
+---
+BasedOnStyle: WebKit
+AlignConsecutiveDeclarations: 'true'
+BreakBeforeBraces: GNU
+NamespaceIndentation: All
+
+...
