@@ -16,6 +16,10 @@ int main(int, char **)
 
         while (window.pollEvent(event))
         {
+            if (event.type == wd::Event::Close)
+            {
+                window.destroy();
+            }
         }
     }
 

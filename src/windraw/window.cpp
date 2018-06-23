@@ -3,6 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+#include <queue>
+
+#include <windraw/event.hpp>
 #include <windraw/style.hpp>
 #include <windraw/window.hpp>
 
@@ -102,7 +105,38 @@ namespace wd
         SetWindowPos(m_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
         numWindows++;
+
         m_isInitialized = true;
+        m_isDestroyed   = false;
+
+        return true;
+    }
+
+    bool Window::destroy()
+    {
+        if (!m_isDestroyed)
+        {
+            if (m_windowHandle)
+            {
+                if (!DestroyWindow(m_windowHandle))
+                {
+                    return false;
+                }
+
+                numWindows--;
+            }
+            
+
+            if (numWindows == 0)
+            {
+                if (!UnregisterClassW(wdClassName, GetModuleHandleW(nullptr)))
+                {
+                    return false;
+                }
+            }
+        }
+
+        m_isDestroyed = true;
 
         return true;
     }
@@ -114,7 +148,7 @@ namespace wd
 
     bool Window::pollEvent(Event &event)
     {
-        if (popEvent(event, false))
+        if (isOpen() && popEvent(event, false))
         {
             return true;
         }
@@ -182,13 +216,7 @@ namespace wd
             SetWindowLongPtr(handle, GWLP_USERDATA, window);
 
             result = 1;
-        }
-
-        // For all i care you can create 90 more windows if you click the X button
-        if (message == WM_CLOSE)
-        {
-            return 0;
-        }
+        }        
 
         Window *window = handle ? reinterpret_cast<Window *>(GetWindowLongPtr(handle, GWLP_USERDATA)) : nullptr;
 
@@ -203,6 +231,12 @@ namespace wd
         else
         {
             result = DefWindowProcW(handle, message, wParam, lParam);
+        }
+
+        // For all i care you can create 90 more windows if you click the X button
+        if (message == WM_CLOSE)
+        {
+            return 0;
         }
 
         return result;
@@ -220,7 +254,18 @@ namespace wd
     }
 
     bool Window::handleEvent(UINT message, WPARAM wParam, LPARAM lParam)
-    {
+    {        
+        switch (message)
+        {
+        case WM_CLOSE:
+        {
+            Event ev;
+            ev.type = Event::Close;
+            m_eventQueue.push(ev);
+            return true;
+        }
+        }
+
         return false;
     }
 }

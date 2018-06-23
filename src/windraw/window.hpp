@@ -9,6 +9,7 @@
 #include <queue>
 #include <string>
 
+#include <windraw/event.hpp>
 #include <windraw/math.hpp>
 #include <windraw/spec.hpp>
 #include <windraw/style.hpp>
@@ -16,10 +17,6 @@
 namespace wd
 {
     class GraphicsContext;
-
-    struct Event
-    {
-    };
 
     using WindowHandle = HWND;
 
