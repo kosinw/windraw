@@ -7,4 +7,7 @@ project (example)
 
 add_executable(example WIN32 "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 target_link_libraries(example PUBLIC windraw)
-set_target_properties(example PROPERTIES LINK_FLAGS "/subsystem:CONSOLE /entry:mainCRTStartup")
+
+if (MSVC)
+	set_target_properties(example PROPERTIES LINK_FLAGS "/subsystem:CONSOLE /entry:mainCRTStartup")
+endif()
