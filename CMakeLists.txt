@@ -21,7 +21,7 @@ target_sources(windraw
 
 set_target_properties(windraw PROPERTIES LINKER_LANGUAGE CXX)
 
-include (src/CMakeLists.txt)
+include (src/windraw/CMakeLists.txt)
 
 target_include_directories(windraw PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(windraw PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
