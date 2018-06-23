@@ -16,11 +16,11 @@
 
 namespace wd
 {
-    class GraphicsContext;
+    class Canvas;
 
     using WindowHandle = HWND;
 
-    typedef GraphicsContext *GraphicsHandle;
+    typedef Canvas *CanvasHandle;
 
     /**
 	 * @brief A wrapper for Win32 API Window creation and initialization,
@@ -65,9 +65,16 @@ namespace wd
         /**
 		 * @brief Return the dimensions of the window.
 		 * 
-		 * @return Size4 x, y, width, and height of the window.
+		 * @return Size2 width and height of the window.
 		 */
-        Size4 getDimensions();
+        bool getDimensions(Size2 &dimensions);
+
+		/**
+		 * @brief Return the position of the window.
+		 * 
+		 * @param position Posiiton of window
+		 */
+		bool getSize(Size2 &position);
 
         /**
 		 * @brief Return the visibility of the window.
@@ -120,6 +127,13 @@ namespace wd
 		 */
         bool popEvent(Event &event, bool blocking);
 
+        /**
+		 * @brief Returns the handle to the current window.
+		 * 
+		 * @return WindowHandle* Handle to current window
+		 */
+        WindowHandle getWindowHandle() const;
+
     private:
         /**
 		 * @brief Registers the window class
@@ -156,12 +170,13 @@ namespace wd
         bool handleEvent(UINT message, WPARAM wParam, LPARAM lParam);
 
     private:
-        WindowHandle      m_windowHandle   = nullptr;
-        GraphicsHandle    m_graphicsHandle = nullptr;
-        unsigned int      m_windowStyles   = 0;
+        WindowHandle      m_windowHandle = nullptr;
+        CanvasHandle      m_canvasHandle = nullptr;
+        unsigned int      m_windowStyles = 0;
         Spec              m_windowSpec;
         bool              m_isInitialized = false;
         bool              m_isDestroyed   = false;
+        Size4             m_lastSize;
         std::queue<Event> m_eventQueue;
         std::wstring      m_title = L"windraw window";
     };

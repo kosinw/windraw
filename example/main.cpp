@@ -16,9 +16,32 @@ int main(int, char **)
 
         while (window.pollEvent(event))
         {
-            if (event.type == wd::Event::Close)
+            switch (event.type)
             {
-                window.destroy();
+            case wd::Event::Close:
+            {
+                break;
+            }
+
+            case wd::Event::Resize:
+            {
+                std::cout << event.size.width
+                          << ", "
+                          << event.size.height
+                          << std::endl;
+
+                break;
+            }
+
+            case wd::Event::Move:
+            {
+                std::cout << event.position.x
+                          << ", "
+                          << event.position.y
+                          << std::endl;
+                          
+                break;
+            }
             }
         }
     }

@@ -140,6 +140,52 @@ namespace wd
         return true;
     }
 
+    bool Window::getDimensions(Size2 &dimensions)
+    {
+        if (m_windowHandle)
+        {
+            RECT boundingBox;
+            ZeroMemory(&boundingBox, sizeof(boundingBox));
+
+            BOOL result = GetClientRect(m_windowHandle, &boundingBox);
+
+            if (!result)
+            {
+                return false;
+            }
+
+            dimensions.w = static_cast<float>(boundingBox.right - boundingBox.left);
+            dimensions.z = static_cast<float>(boundingBox.bottom - boundingBox.top);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Window::getSize(Size2 &dimensions)
+    {
+        if (m_windowHandle)
+        {
+            RECT boundingBox;
+            ZeroMemory(&boundingBox, sizeof(boundingBox));
+
+            BOOL result = GetWindowRect(m_windowHandle, &boundingBox);
+
+            if (!result)
+            {
+                return false;
+            }
+
+            dimensions.x = static_cast<float>(boundingBox.left);
+            dimensions.y = static_cast<float>(boundingBox.top);
+
+            return true;
+        }
+
+        return false;
+    }
+
     bool Window::isOpen() const
     {
         return m_isInitialized && !m_isDestroyed;
@@ -184,6 +230,11 @@ namespace wd
         return false;
     }
 
+    WindowHandle Window::getWindowHandle() const
+    {
+        return m_windowHandle;
+    }
+
     bool Window::registerWindowClass()
     {
         WNDCLASSW wndclass;
@@ -193,7 +244,7 @@ namespace wd
         wndclass.lpszClassName = wdClassName;
         wndclass.style         = CS_VREDRAW | CS_HREDRAW;
         wndclass.lpfnWndProc   = &Window::windowProcedure;
-        wndclass.hbrBackground = (HBRUSH)COLOR_WINDOW;
+        wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wndclass.hCursor       = LoadCursor(wndclass.hInstance, IDC_ARROW);
         wndclass.hIcon         = LoadIcon(wndclass.hInstance, IDI_APPLICATION);
         wndclass.lpszMenuName  = NULL;
@@ -264,6 +315,44 @@ namespace wd
             Event ev;
             ev.type = Event::Close;
             m_eventQueue.push(ev);
+            return true;
+        }
+
+        case WM_MOVE:
+        {
+            Size2 currentSize;
+            getSize(currentSize);
+
+            if (m_lastSize.xy != currentSize)
+            {
+                m_lastSize.xy = currentSize;
+
+                Event ev;
+                ev.type       = Event::Move;
+                ev.position.x = m_lastSize.x;
+                ev.position.y = m_lastSize.y;
+                m_eventQueue.push(ev);
+            }
+
+            return true;
+        }
+
+        case WM_SIZE:
+        {
+            Size2 currentSize;
+            getDimensions(currentSize);
+
+            if (wParam != SIZE_MINIMIZED && m_lastSize.wz != currentSize)
+            {
+                m_lastSize.wz = currentSize;
+
+                Event ev;
+                ev.type        = Event::Resize;
+                ev.size.width  = m_lastSize.width;
+                ev.size.height = m_lastSize.height;
+                m_eventQueue.push(ev);
+            }
+
             return true;
         }
         }
