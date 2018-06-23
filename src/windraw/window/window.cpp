@@ -3,6 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+#include <Windows.h>
 #include <queue>
 
 #include <windraw/window/event.hpp>
@@ -186,6 +187,22 @@ namespace wd
         return false;
     }
 
+    Vector2f Window::getMousePosition()
+    {
+        POINT cursorPoint;
+        ZeroMemory(&cursorPoint, sizeof(POINT));
+
+        if (GetCursorPos(&cursorPoint))
+        {
+            if (ScreenToClient(m_windowHandle, &cursorPoint))
+            {
+                return Vector2f(static_cast<float>(cursorPoint.x), static_cast<float>(cursorPoint.y));
+            }
+        }
+
+        return { 0, 0 };
+    }
+
     bool Window::isOpen() const
     {
         return m_isInitialized && !m_isDestroyed;
@@ -333,6 +350,162 @@ namespace wd
                 ev.position.y = m_lastSize.y;
                 m_eventQueue.push(ev);
             }
+
+            return true;
+        }
+
+        case WM_LBUTTONDOWN:
+        {
+            SetCapture(m_windowHandle);
+
+            Event ev;
+
+            ev.type      = Event::MouseDown;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::LEFT;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
+
+            return true;
+        }
+
+        case WM_RBUTTONDOWN:
+        {
+            SetCapture(m_windowHandle);
+
+            Event ev;
+
+            ev.type      = Event::MouseDown;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::RIGHT;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
+
+            return true;
+        }
+
+        case WM_MBUTTONDOWN:
+        {
+            SetCapture(m_windowHandle);
+
+            Event ev;
+
+            ev.type      = Event::MouseDown;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::MIDDLE;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
+
+            return true;
+        }
+
+        case WM_LBUTTONUP:
+        {
+            ReleaseCapture();
+
+            Event ev;
+
+            ev.type      = Event::MouseRelease;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::LEFT;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
+
+            return true;
+        }
+
+        case WM_RBUTTONUP:
+        {
+            ReleaseCapture();
+
+            Event ev;
+
+            ev.type      = Event::MouseRelease;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::RIGHT;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
+
+            return true;
+        }
+
+        case WM_MBUTTONUP:
+        {
+            ReleaseCapture();
+
+            Event ev;
+
+            ev.type      = Event::MouseRelease;
+            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
+            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.mod = Event::MouseEvent::MIDDLE;
+
+            if (wParam & MK_CONTROL)
+            {
+                ev.mouse.mod |= Event::MouseEvent::CTRL;
+            }
+
+            if (wParam & MK_SHIFT)
+            {
+                ev.mouse.mod |= Event::MouseEvent::SHIFT;
+            }
+
+            m_eventQueue.push(ev);
 
             return true;
         }

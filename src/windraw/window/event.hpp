@@ -12,7 +12,23 @@ namespace wd
 	 * 
 	 */
     struct Event
-    {
+    { /**
+		 * @brief The type of event that has been triggered.
+		 * 
+		 */
+        enum EventType
+        {
+            // Window events
+            Close,
+            Resize,
+            Move,
+
+            // General mouse events
+            MouseDrag,
+            MouseDown,
+            MouseRelease,
+        };
+
         struct MoveEvent
         {
             float x;
@@ -25,15 +41,21 @@ namespace wd
             float height;
         };
 
-        /**
-		 * @brief The type of event that has been triggered.
-		 * 
-		 */
-        enum EventType
+        struct MouseEvent
         {
-            Close,
-            Resize,
-            Move
+            enum
+            {
+                None   = 0,
+                CTRL   = 1 << 0,
+                SHIFT  = 1 << 1,
+                LEFT   = 1 << 2,
+                RIGHT  = 1 << 3,
+                MIDDLE = 1 << 4
+            };
+
+            float        x;
+            float        y;
+            unsigned int mod;
         };
 
         EventType type;
@@ -41,6 +63,7 @@ namespace wd
         union {
             ResizeEvent size;
             MoveEvent   position;
+            MouseEvent  mouse;
         };
     };
 } // namespace wd

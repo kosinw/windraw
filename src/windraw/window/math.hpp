@@ -9,6 +9,14 @@ namespace wd
 {
     struct Size2
     {
+        Size2() = default;
+
+        Size2(float x, float y)
+            : x(x)
+            , y(y)
+        {
+        }
+
         union {
             struct
             {
@@ -35,6 +43,16 @@ namespace wd
 
     struct Size4
     {
+        Size4() = default;
+        
+        Size4(float x, float y, float z, float w)
+            : x(x)
+            , y(y)
+            , z(z)
+            , w(w)
+        {
+        }
+
         union {
             struct
             {
@@ -58,7 +76,7 @@ namespace wd
                 float height;
             };
 
-            Size2 wz;            
+            Size2 wz;
         };
 
         bool operator==(const Size4 &other);

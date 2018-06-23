@@ -8,7 +8,7 @@
 
 int main(int, char **)
 {
-    wd::Window window(wd::Spec(1280, 720), L"Best Window Ever.");
+    wd::Window window(wd::Spec(1280, 720), L"Best Window Ever.", wd::Style::Titlebar);
 
     while (window.isOpen())
     {
@@ -20,26 +20,7 @@ int main(int, char **)
             {
             case wd::Event::Close:
             {
-                break;
-            }
-
-            case wd::Event::Resize:
-            {
-                std::cout << event.size.width
-                          << ", "
-                          << event.size.height
-                          << std::endl;
-
-                break;
-            }
-
-            case wd::Event::Move:
-            {
-                std::cout << event.position.x
-                          << ", "
-                          << event.position.y
-                          << std::endl;
-                          
+                window.destroy();
                 break;
             }
             }

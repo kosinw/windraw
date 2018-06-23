@@ -69,12 +69,19 @@ namespace wd
 		 */
         bool getDimensions(Size2 &dimensions);
 
-		/**
+        /**
 		 * @brief Return the position of the window.
 		 * 
-		 * @param position Posiiton of window
+		 * @param position Position of window
 		 */
-		bool getSize(Size2 &position);
+        bool getSize(Size2 &position);
+
+        /**
+		 * @brief Returns the position of the mouse cursor.
+		 * 
+		 * @return Vector2f Position of mouse cursor.
+		 */
+        Vector2f getMousePosition();
 
         /**
 		 * @brief Return the visibility of the window.
@@ -176,6 +183,7 @@ namespace wd
         Spec              m_windowSpec;
         bool              m_isInitialized = false;
         bool              m_isDestroyed   = false;
+        bool              m_mouseIsDown   = false;
         Size4             m_lastSize;
         std::queue<Event> m_eventQueue;
         std::wstring      m_title = L"windraw window";
