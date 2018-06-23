@@ -7,7 +7,7 @@
 cmake_minimum_required(VERSION 3.0.1)
 
 # Throw error message if platform is not Windows
-if (NOT MSVC AND NOT CMAKE_COMPILER_IS_GNUCXX)
+if (NOT WIN32)
 	message(FATAL_ERROR "You must use MinGW or VC++ compilers in order to compile this library!")
 endif()
 
