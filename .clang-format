@@ -1,7 +1,9 @@
 ---
 BasedOnStyle: WebKit
 AlignConsecutiveDeclarations: 'true'
+AlignConsecutiveAssignments: 'true'
 BreakBeforeBraces: GNU
 NamespaceIndentation: All
+PointerAlignment: Right
 
 ...
