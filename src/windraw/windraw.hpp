@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "windraw/event.hpp"
-#include "windraw/math.hpp"
-#include "windraw/spec.hpp"
-#include "windraw/style.hpp"
-#include "windraw/window.hpp"
+#include <windraw/window/event.hpp>
+#include <windraw/window/math.hpp>
+#include <windraw/window/spec.hpp>
+#include <windraw/window/style.hpp>
+#include <windraw/window/window.hpp>

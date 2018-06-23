@@ -5,9 +5,9 @@
 
 #include <queue>
 
-#include <windraw/event.hpp>
-#include <windraw/style.hpp>
-#include <windraw/window.hpp>
+#include <windraw/window/event.hpp>
+#include <windraw/window/style.hpp>
+#include <windraw/window/window.hpp>
 
 namespace
 {
@@ -125,7 +125,6 @@ namespace wd
 
                 numWindows--;
             }
-            
 
             if (numWindows == 0)
             {
@@ -194,6 +193,9 @@ namespace wd
         wndclass.lpszClassName = wdClassName;
         wndclass.style         = CS_VREDRAW | CS_HREDRAW;
         wndclass.lpfnWndProc   = &Window::windowProcedure;
+        wndclass.hbrBackground = (HBRUSH)COLOR_WINDOW;
+        wndclass.hCursor       = LoadCursor(wndclass.hInstance, IDC_ARROW);
+        wndclass.hIcon         = LoadIcon(wndclass.hInstance, IDI_APPLICATION);
         wndclass.lpszMenuName  = NULL;
 
         if (RegisterClass(&wndclass))
@@ -216,7 +218,7 @@ namespace wd
             SetWindowLongPtr(handle, GWLP_USERDATA, window);
 
             result = 1;
-        }        
+        }
 
         Window *window = handle ? reinterpret_cast<Window *>(GetWindowLongPtr(handle, GWLP_USERDATA)) : nullptr;
 
@@ -254,7 +256,7 @@ namespace wd
     }
 
     bool Window::handleEvent(UINT message, WPARAM wParam, LPARAM lParam)
-    {        
+    {
         switch (message)
         {
         case WM_CLOSE:
