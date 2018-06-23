@@ -11,13 +11,18 @@ Windraw is a rendering library for Windows that uses Direct2D or GDI+ for simple
 
 This library was made originally for the purpose of my visualizer for my [A* algorithm](https://github.com/kosinw/astar); however, this can be extended to be used for 2D games and may be my preferred tool for building emulators and 2D gmaes.
 
+## Authors
+- Kosi Nwabueze -- main developer (https://github.com/kosinw/)
+
 ## Building
 
 Windraw uses CMake to generate build files for the MinGW toolchain or the Visual C++ toolchain.
 
 CMake outputs a static library; therefore, all you have to do is link the static library to your project and include the headers files in the include directory.
 
-If you are using CMake for your project all you need to do is `include_subdirectories(path/to/windraw)` and use `target_link_library()`
+If you are using CMake for your project all you need to do is `include_subdirectories(path/to/windraw)` and use `target_link_library()`.
+
+Preferrably, the Visual Studio 13+ and MSYS Makefiles generators should be used, but others might work.
 
 An example building the static library with debug output for msys + MinGW:
 ```bash
@@ -31,6 +36,10 @@ $ make
 ## Documentation
 
 <!-- TODO: implement Doxygen to generate build files -->
+
+## Inspirations
+- SFML, I wanted to create a library that uses idiomatic C++ like SFML; yet wasn't so complicated and didn't require so many lines of source code. I also liked the event pump system in SFML.
+- XNA, Similar to the reasons of SFML such as the event pump and simplicity.
 
 ## License
 ```txt
