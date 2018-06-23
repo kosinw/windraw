@@ -13,17 +13,10 @@ project (windraw CXX)
 
 add_library(windraw STATIC "")
 
-target_sources(windraw
-	PUBLIC
-		"${CMAKE_CURRENT_LIST_DIR}/include/windraw/windraw.hpp"
-		"${CMAKE_CURRENT_LIST_DIR}/include/windraw/platform.hpp"
-)
-
 set_target_properties(windraw PROPERTIES LINKER_LANGUAGE CXX)
 
 include (src/windraw/CMakeLists.txt)
 
-target_include_directories(windraw PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(windraw PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(windraw PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 add_subdirectory(example)
