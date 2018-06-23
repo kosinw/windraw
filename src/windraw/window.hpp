@@ -16,7 +16,10 @@
 namespace wd
 {
     class GraphicsContext;
-    struct Event;
+
+    struct Event
+    {
+    };
 
     using WindowHandle = HWND;
 
@@ -30,9 +33,6 @@ namespace wd
     class Window
     {
     public:
-        using Style = unsigned int;
-
-    public:
         /**
 		 * @brief Construct a new Window object.
 		 * 
@@ -40,20 +40,7 @@ namespace wd
 		 * @param style Window styles for the window
 		 * @param title Title that will be displayed on window
 		 */
-        Window(Spec spec, Style style, const std::wstring &title);
-
-        /**
-		 * @brief Construct a new Window object from a window handle.
-		 * 
-		 * @param handle HWND that will become the handle for the window class
-		 */
-        Window(WindowHandle handle);
-
-        /**
-		 * @brief Construct a new Window object with default properties.
-		 * 
-		 */
-        Window();
+        Window(Spec spec, const std::wstring &title, unsigned int style = Style::Default);
 
         Window &operator=(const Window &) = delete;
         Window &operator=(Window &&) = delete;
@@ -126,7 +113,7 @@ namespace wd
 		 */
         bool pollEvent(Event &event);
 
-		/**
+        /**
 		 * @brief Checks the event queue. If blocking, then wait until next event. If not, then just continue execution.
 		 * 
 		 * @param event Outputs event type and args
@@ -137,13 +124,48 @@ namespace wd
         bool popEvent(Event &event, bool blocking);
 
     private:
+        /**
+		 * @brief Registers the window class
+		 * 
+		 * @return true If the window class registered successfully
+		 * @return false If the window class could not register sucessfully
+		 */
+        static bool registerWindowClass();
+
+        /**
+		 * @brief Window procedure needed for WinAPI.
+		 * 
+		 * @param handle A handle to a window.
+		 * @param message Type of event.
+		 * @param wParam Optional event parameter.
+		 * @param lParam Optional event parameter.		 
+		 * @return LRESULT Result of handling event.
+		 */
+        static LRESULT CALLBACK windowProcedure(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
+
+        /**
+		 * @brief Runs main event loop of WinAPI when called.
+		 * 
+		 */
+        void runMainLoop();
+
+        /**
+		 * @brief Handles windows events by reading the message loop.
+		 * 
+		 * @param message Type of event.
+		 * @param wParam Optional event parameter.
+		 * @param lParam Optional event parameter;
+		 */
+        bool handleEvent(UINT message, WPARAM wParam, LPARAM lParam);
+
+    private:
         WindowHandle      m_windowHandle   = nullptr;
         GraphicsHandle    m_graphicsHandle = nullptr;
-        LONG_PTR          m_lastCallback   = 0;
-        Style             m_windowStyles   = 0;
-        Spec              m_windowSpec     = { 1280, 720, 32 };
-        bool              m_isVisible      = true;
-        bool              m_isInitialized  = false;
+        unsigned int      m_windowStyles   = 0;
+        Spec              m_windowSpec;
+        bool              m_isInitialized = false;
+        bool              m_isDestroyed   = false;
         std::queue<Event> m_eventQueue;
+        std::wstring      m_title = L"windraw window";
     };
 } // namespace wd

@@ -13,8 +13,6 @@ namespace wd
 	 */
     class Spec
     {
-        friend class wd::Window;
-
     public:
         /**
 		 * @brief Construct a new Spec object
@@ -23,12 +21,17 @@ namespace wd
 		 * @param height Height of the window
 		 * @param colorDepth Color depth of the window in bits per pixel (by default it is 32 bits per pixel)
 		 */
-        Spec(unsigned int width, unsigned int height, unsigned int colorDepth = 32);
+        Spec(unsigned int width, unsigned int height, unsigned int colorDepth = 32)
+            : width(width)
+            , height(height)
+            , colorDepth(colorDepth)
+        {
+        }
 
-    private:
-        unsigned int m_Width;
-        unsigned int m_Height;
-        unsigned int m_ColorDepth;
+    public:
+        unsigned int width;
+        unsigned int height;
+        unsigned int colorDepth;
     };
 
 } // namespac wd

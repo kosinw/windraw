@@ -2,7 +2,7 @@
 BasedOnStyle: WebKit
 AlignConsecutiveDeclarations: 'true'
 AlignConsecutiveAssignments: 'true'
-BreakBeforeBraces: GNU
+BreakBeforeBraces: Allman
 NamespaceIndentation: All
 PointerAlignment: Right
 

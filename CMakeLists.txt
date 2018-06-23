@@ -13,6 +13,8 @@ project (windraw CXX)
 
 add_library(windraw STATIC "")
 
+add_definitions(-DUNICODE=1)
+
 set_target_properties(windraw PROPERTIES LINKER_LANGUAGE CXX)
 
 include (src/windraw/CMakeLists.txt)
