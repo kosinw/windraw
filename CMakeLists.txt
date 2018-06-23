@@ -27,8 +27,14 @@ add_definitions(-DWIN32_LEAN_AND_MEAN)
 # If debug add DEBUG macro
 set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
-if (CMAKE_COMPILER_IS_GNUCXX)
+
+# Add specific defines to determine which OS is being used
+if (CMAKE_COMPILER_IS_GNUCXX AND WIN32)
+	add_definitions(-DWD_PLATFORM_MINGW=1)
 elseif (MSVC)
+	add_definitions(-DWD_PLATFORM_MSVC=1)
+	add_definitions(-DWD_DIRECT2D_ENABLED=1)
+	add_definitions(-DWD_GDIPLUS_ENABLED=1)
 endif()
 
 # Use the C++ linker with windraw
