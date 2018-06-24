@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-#include <windraw/window/math.hpp>
+#include <windraw/util/math.hpp>
 
 namespace wd
 {
