@@ -358,6 +358,8 @@ namespace wd
         {
             SetCapture(m_windowHandle);
 
+            m_mouseIsDown[LBUTTON] = true;
+
             Event ev;
 
             ev.type      = Event::MouseDown;
@@ -383,6 +385,8 @@ namespace wd
         case WM_RBUTTONDOWN:
         {
             SetCapture(m_windowHandle);
+
+            m_mouseIsDown[RBUTTON] = true;
 
             Event ev;
 
@@ -410,6 +414,8 @@ namespace wd
         {
             SetCapture(m_windowHandle);
 
+            m_mouseIsDown[MBUTTON] = true;
+
             Event ev;
 
             ev.type      = Event::MouseDown;
@@ -435,6 +441,8 @@ namespace wd
         case WM_LBUTTONUP:
         {
             ReleaseCapture();
+
+            m_mouseIsDown[LBUTTON] = false;
 
             Event ev;
 
@@ -462,6 +470,8 @@ namespace wd
         {
             ReleaseCapture();
 
+            m_mouseIsDown[RBUTTON] = false;
+
             Event ev;
 
             ev.type      = Event::MouseRelease;
@@ -487,6 +497,8 @@ namespace wd
         case WM_MBUTTONUP:
         {
             ReleaseCapture();
+
+            m_mouseIsDown[MBUTTON] = false;
 
             Event ev;
 

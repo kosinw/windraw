@@ -9,6 +9,7 @@
 #include <queue>
 #include <string>
 
+#include <windraw/graphics/canvas.hpp>
 #include <windraw/window/event.hpp>
 #include <windraw/window/math.hpp>
 #include <windraw/window/spec.hpp>
@@ -16,7 +17,9 @@
 
 namespace wd
 {
-    class Canvas;
+    const unsigned int LBUTTON = 0;
+    const unsigned int MBUTTON = 1;
+    const unsigned int RBUTTON = 2;
 
     using WindowHandle = HWND;
 
@@ -183,7 +186,7 @@ namespace wd
         Spec              m_windowSpec;
         bool              m_isInitialized = false;
         bool              m_isDestroyed   = false;
-        bool              m_mouseIsDown   = false;
+        bool              m_mouseIsDown[3];
         Size4             m_lastSize;
         std::queue<Event> m_eventQueue;
         std::wstring      m_title = L"windraw window";
