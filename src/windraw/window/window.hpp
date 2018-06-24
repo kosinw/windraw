@@ -11,7 +11,7 @@
 
 #include <windraw/graphics/canvas.hpp>
 #include <windraw/window/event.hpp>
-#include <windraw/window/math.hpp>
+#include <windraw/util/math.hpp>
 #include <windraw/window/spec.hpp>
 #include <windraw/window/style.hpp>
 
