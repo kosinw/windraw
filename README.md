@@ -35,6 +35,15 @@ $ cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="Debug" ..
 $ make
 ```
 
+An example building the static library with vcvarsall setup and Ninja with debug output for VC++
+```bash
+$ cd path/to/windraw
+$ mkdir build
+$ cd build
+$ cmake -G "Ninja" -DCMAKE_BUILD_TYPE="Debug"
+$ ninja
+```
+
 <!-- ## Documentation -->
 
 <!-- TODO: implement Doxygen to generate build files -->
