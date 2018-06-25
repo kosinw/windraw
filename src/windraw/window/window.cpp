@@ -105,7 +105,7 @@ namespace wd
             return false;
         }
 
-        SetWindowPos(m_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);        
+        SetWindowPos(m_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
         numWindows++;
 
@@ -142,6 +142,8 @@ namespace wd
             }
 
             delete m_canvasHandle;
+            m_canvasHandle = nullptr;
+
             CoUninitialize();
         }
 
@@ -164,8 +166,8 @@ namespace wd
                 return false;
             }
 
-            dimensions.w = static_cast<float>(boundingBox.right - boundingBox.left);
-            dimensions.z = static_cast<float>(boundingBox.bottom - boundingBox.top);
+            dimensions.width  = static_cast<float>(boundingBox.right - boundingBox.left);
+            dimensions.height = static_cast<float>(boundingBox.bottom - boundingBox.top);
 
             return true;
         }
@@ -220,6 +222,19 @@ namespace wd
     bool Window::pollEvent(Event &event)
     {
         if (isOpen() && popEvent(event, false))
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    bool Window::waitEvent(Event &event, const Event::EventType &eventType)
+    {
+        if (isOpen() && popEvent(event, true) && event.type == eventType)
         {
             return true;
         }
@@ -550,7 +565,7 @@ namespace wd
             if (m_canvasHandle)
             {
                 m_canvasHandle->resizeRenderTarget(currentSize);
-            }            
+            }
 
             if (wParam != SIZE_MINIMIZED && m_lastSize.wz != currentSize)
             {

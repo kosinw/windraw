@@ -127,6 +127,16 @@ namespace wd
         bool pollEvent(Event &event);
 
         /**
+		 * @brief Waits until a certain type of event has appeared in the event queue.
+		 * 
+		 * @param event Outputs event type and args
+		 * @param eventType Type of event to wait for
+		 * @return true If there are more events left in the queue.
+		 * @return false If there are no more events left in the queue.
+		 */
+        bool waitEvent(Event &event, const Event::EventType &eventType);
+
+        /**
 		 * @brief Checks the event queue. If blocking, then wait until next event. If not, then just continue execution.
 		 * 
 		 * @param event Outputs event type and args

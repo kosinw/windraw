@@ -10,7 +10,12 @@ using namespace wd;
 
 int main(int, char **)
 {
-    Window window(Spec(700, 700), L"Best Window Ever.");
+    Window window(Spec(750, 750), L"Best Window Ever.", Style::Close);
+
+    Size2 dimensions;
+    window.getDimensions(dimensions);
+
+    CanvasHandle canvas = window.getCanvasHandle();
 
     while (window.isOpen())
     {
@@ -18,35 +23,41 @@ int main(int, char **)
 
         while (window.pollEvent(event))
         {
+            switch (event.type)
+            {
+            case Event::Resize:
+            {
+                dimensions = Size2(event.size.width, event.size.height);
+                break;
+            }
+
+            case Event::Close:
+            {
+                window.destroy();
+                break;
+            }
+            }
         }
 
         CanvasHandle canvas = window.getCanvasHandle();
 
-        Size2 size;
-        window.getDimensions(size);
-
-        RectShape rect;
-
-        std::cout << size.x << ", " << size.y << std::endl;
-
-        rect.color             = ColorF(255, 0, 0);
-        rect.dimensions.width  = 350;
-        rect.dimensions.height = 350;
-        rect.dimensions.x      = 0;
-        rect.dimensions.y      = 0;
-        
-        canvas->beginDraw();
-
-        canvas->clear();
-
-        canvas->draw(rect);
-
-        canvas->endDraw();
-
-        if (event.type == wd::Event::Close)
+        if (canvas)
         {
-            window.destroy();
-            break;
+            RectShape rect;
+
+            rect.color             = ColorF(1.0f, 0, 0);
+            rect.dimensions.width  = 250;
+            rect.dimensions.height = 250;
+            rect.dimensions.x      = (dimensions.width - 250) / 2;
+            rect.dimensions.y      = (dimensions.height - 250) / 2;
+
+            canvas->beginDraw();
+
+            canvas->clear();
+
+            canvas->draw(rect);
+
+            canvas->endDraw();
         }
     }
 

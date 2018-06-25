@@ -7,6 +7,8 @@
 #include <d2d1.h>
 
 #include <windraw/graphics/canvas.hpp>
+#include <windraw/graphics/shapes.hpp>
+#include <windraw/util/color.hpp>
 
 namespace
 {
@@ -66,40 +68,51 @@ namespace wd
 
     void Canvas::beginDraw()
     {
-        HRESULT hr;
-
-        auto renderProps     = D2D1::RenderTargetProperties();
-        auto size            = D2D1::SizeU(static_cast<unsigned>(m_dimensions.width), static_cast<unsigned>(m_dimensions.height));
-        auto hwndRenderProps = D2D1::HwndRenderTargetProperties(m_windowHandle, size);
-
-        hr = m_factory->CreateHwndRenderTarget(
-            renderProps,
-            hwndRenderProps,
-            &m_renderTarget);
-
-        if (!SUCCEEDED(hr))
+        if (!m_renderTarget)
         {
-            // TODO: Add error logging here
-            return;
+            HRESULT hr;
+
+            auto renderProps     = D2D1::RenderTargetProperties();
+            auto size            = D2D1::SizeU(static_cast<unsigned>(m_dimensions.width), static_cast<unsigned>(m_dimensions.height));
+            auto hwndRenderProps = D2D1::HwndRenderTargetProperties(m_windowHandle, size);
+
+            hr = m_factory->CreateHwndRenderTarget(
+                renderProps,
+                hwndRenderProps,
+                &m_renderTarget);
+            
+            // For some odd reason it doesn't map pixels 1 : 1 unless this is sets
+            m_renderTarget->SetDpi(96.0f, 96.0f);
+
+            if (!SUCCEEDED(hr))
+            {
+                // TODO: Add error logging here
+                return;
+            }
         }
 
         m_renderTarget->BeginDraw();
+
+        m_renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
     }
 
     void Canvas::endDraw()
     {
-        m_renderTarget->EndDraw();
+        HRESULT hr = m_renderTarget->EndDraw();
 
-        SafeRelease(&m_renderTarget);
-
-        if (!m_solidBrushes.empty())
+        if (hr == D2DERR_RECREATE_TARGET)
         {
-            for (auto brush : m_solidBrushes)
-            {
-                SafeRelease(&brush.second);
-            }
+            SafeRelease(&m_renderTarget);
 
-            m_solidBrushes.clear();
+            if (!m_solidBrushes.empty())
+            {
+                for (auto brush : m_solidBrushes)
+                {
+                    SafeRelease(&brush.second);
+                }
+
+                m_solidBrushes.clear();
+            }
         }
     }
 
@@ -145,6 +158,11 @@ namespace wd
     void Canvas::resizeRenderTarget(const Size2 &newSize)
     {
         m_dimensions = newSize;
+
+        if (m_renderTarget)
+        {
+            m_renderTarget->Resize(D2D1::SizeU(static_cast<unsigned>(newSize.width), static_cast<unsigned>(newSize.height)));
+        }
     }
 
 } // namespace wd
