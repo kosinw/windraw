@@ -7,12 +7,16 @@
 
 <img src="images/cover.png" width="500px"></img>
 
-Windraw is a rendering library for Windows that uses Direct2D or GDI+ for simple drawing such as shape rendering and bitmap blitting.
+Windraw is a rendering library for Windows that uses Direct2D for simple drawing such as shape rendering and texture rendering.
 
-This library was made originally for the purpose of my visualizer for my [A* algorithm](https://github.com/kosinw/astar); however, this can be extended to be used for 2D games and may be my preferred tool for building emulators and 2D gmaes.
+This library was made originally for the purpose of my visualizer for my [A* algorithm](https://github.com/kosinw/astar); however, this can be extended to be used for any 2D rendering and may be my preferred tool for building 2D emulators and 2D games.
 
 ## Authors
 - Kosi Nwabueze -- main developer (https://github.com/kosinw/)
+
+## Extending
+
+Future versions may include more sophisticated graphics APIs such as Direct3D or even OpenGL. C# bindings are definitely going to be implemented.
 
 ## Building
 
