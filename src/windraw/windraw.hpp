@@ -10,8 +10,11 @@
 #include <windraw/window/style.hpp>
 #include <windraw/window/window.hpp>
 
+#include <windraw/util/color.hpp>
 #include <windraw/util/math.hpp>
 
-#if defined(WD_DIRECT2D_ENABLED)
-#elif defined(WD_GDIPLUS_ENABLED)
-#endif
+#include <windraw/graphics/canvas.hpp>
+#include <windraw/graphics/bitmap.hpp>
+#include <windraw/graphics/shapes.hpp>
+
+#pragma comment(lib, "d2d1.lib")

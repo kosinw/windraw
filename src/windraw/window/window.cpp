@@ -10,6 +10,8 @@
 #include <windraw/window/style.hpp>
 #include <windraw/window/window.hpp>
 
+#include <windraw/graphics/canvas.hpp>
+
 namespace
 {
     unsigned int   numWindows  = 0;
@@ -103,9 +105,13 @@ namespace wd
             return false;
         }
 
-        SetWindowPos(m_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+        SetWindowPos(m_windowHandle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);        
 
         numWindows++;
+
+        Size2 clientSize;
+        getDimensions(clientSize);
+        m_canvasHandle = new Canvas(m_windowHandle, clientSize);
 
         m_isInitialized = true;
         m_isDestroyed   = false;
@@ -134,6 +140,9 @@ namespace wd
                     return false;
                 }
             }
+
+            delete m_canvasHandle;
+            CoUninitialize();
         }
 
         m_isDestroyed = true;
@@ -247,9 +256,14 @@ namespace wd
         return false;
     }
 
-    WindowHandle Window::getWindowHandle() const
+    const WindowHandle Window::getWindowHandle() const
     {
         return m_windowHandle;
+    }
+
+    const CanvasHandle Window::getCanvasHandle() const
+    {
+        return m_canvasHandle;
     }
 
     bool Window::registerWindowClass()
@@ -261,7 +275,7 @@ namespace wd
         wndclass.lpszClassName = wdClassName;
         wndclass.style         = CS_VREDRAW | CS_HREDRAW;
         wndclass.lpfnWndProc   = &Window::windowProcedure;
-        wndclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wndclass.hbrBackground = NULL;
         wndclass.hCursor       = LoadCursor(wndclass.hInstance, IDC_ARROW);
         wndclass.hIcon         = LoadIcon(wndclass.hInstance, IDI_APPLICATION);
         wndclass.lpszMenuName  = NULL;
@@ -332,6 +346,12 @@ namespace wd
             Event ev;
             ev.type = Event::Close;
             m_eventQueue.push(ev);
+            return true;
+        }
+
+        case WM_DESTROY:
+        {
+            PostQuitMessage(0);
             return true;
         }
 
@@ -526,6 +546,11 @@ namespace wd
         {
             Size2 currentSize;
             getDimensions(currentSize);
+
+            if (m_canvasHandle)
+            {
+                m_canvasHandle->resizeRenderTarget(currentSize);
+            }            
 
             if (wParam != SIZE_MINIMIZED && m_lastSize.wz != currentSize)
             {

@@ -9,9 +9,8 @@
 #include <queue>
 #include <string>
 
-#include <windraw/graphics/canvas.hpp>
-#include <windraw/window/event.hpp>
 #include <windraw/util/math.hpp>
+#include <windraw/window/event.hpp>
 #include <windraw/window/spec.hpp>
 #include <windraw/window/style.hpp>
 
@@ -21,9 +20,9 @@ namespace wd
     const unsigned int MBUTTON = 1;
     const unsigned int RBUTTON = 2;
 
+	class Canvas;
     using WindowHandle = HWND;
-
-    typedef Canvas *CanvasHandle;
+    using CanvasHandle = Canvas *;
 
     /**
 	 * @brief A wrapper for Win32 API Window creation and initialization,
@@ -142,7 +141,14 @@ namespace wd
 		 * 
 		 * @return WindowHandle* Handle to current window
 		 */
-        WindowHandle getWindowHandle() const;
+        const WindowHandle getWindowHandle() const;
+
+        /**
+		 * @brief Returns the handle to the canvas. Use this to draw
+		 * 
+		 * @return CanvasHandle 
+		 */
+        const CanvasHandle getCanvasHandle() const;
 
     private:
         /**

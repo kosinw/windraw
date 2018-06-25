@@ -4,11 +4,3 @@
 // https://opensource.org/licenses/MIT
 
 #pragma once
-
-namespace wd
-{
-	class CanvasImpl
-	{
-		
-	};
-} // namespace wd

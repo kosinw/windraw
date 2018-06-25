@@ -5,47 +5,59 @@
 
 #pragma once
 
+#include <type_traits>
+
 namespace wd
 {
+    struct ColorI;
+    struct ColorF;
+
     struct ColorF
     {
-        ColorF(float r = 1.f, float g = 1.f, float b = 1.f)
-            : r(r)
-            , g(g)
-            , b(b)
-        {
-        }
+        ColorF();
+        ColorF(float r, float g, float b);
+        ColorF(ColorI other);
 
-        ColorF(ColorI other)
-            : r(other.r / 255.f)
-            , g(other.g / 255.f)
-            , b(other.b / 255.f)
-        {
-        }
+        bool operator==(const ColorF& other) const;
 
         float r;
         float g;
-        float b;		
+        float b;
     };
 
     struct ColorI
     {
-        ColorI(unsigned char r = 255, unsigned g = 255, unsigned b = 255)
-            : r(r)
-            , g(g)
-            , b(b)
-        {
-        }
-
-        ColorI(ColorF other)
-            : r(static_cast<unsigned int>(other.r * 255))
-            , g(static_cast<unsigned int>(other.g * 255))
-            , b(static_cast<unsigned int>(other.b * 255))
-        {
-        }
+        ColorI();
+        ColorI(unsigned char r, unsigned char g, unsigned char b);
+        ColorI(ColorF other);
 
         unsigned char r;
         unsigned char g;
         unsigned char b;
     };
+
+    namespace Color
+    {
+        const ColorF WhiteF = ColorF(1.f, 1.f, 1.f);
+        const ColorF BlackF = ColorF(0.f, 0.f, 0.f);
+
+        const ColorI WhiteI = ColorI(255, 255, 255);
+        const ColorI BlackI = ColorI(0, 0, 0);
+    }
 } // namespace wd
+
+// defined hash functor specialized for ColorF
+namespace std
+{
+    template <>
+    struct hash<wd::ColorF>
+    {
+        std::size_t operator()(const wd::ColorF &c) const
+        {
+            return ((std::hash<float>()(c.r)
+                        ^ std::hash<float>()(c.g) << 1)
+                       >> 1)
+                ^ (std::hash<float>()(c.b) << 1);
+        }
+    };
+}
