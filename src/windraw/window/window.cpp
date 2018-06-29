@@ -53,7 +53,7 @@ namespace wd
         {
             if (m_windowStyles & Style::Titlebar)
             {
-                winStyles |= WS_OVERLAPPED | WS_MINIMIZEBOX;
+                winStyles |= WS_CAPTION | WS_MINIMIZEBOX;
             }
             if (m_windowStyles & Style::Resize)
             {
@@ -291,8 +291,8 @@ namespace wd
         wndclass.style         = CS_VREDRAW | CS_HREDRAW;
         wndclass.lpfnWndProc   = &Window::windowProcedure;
         wndclass.hbrBackground = NULL;
-        wndclass.hCursor       = LoadCursor(wndclass.hInstance, IDC_ARROW);
-        wndclass.hIcon         = LoadIcon(wndclass.hInstance, IDI_APPLICATION);
+        wndclass.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+        wndclass.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
         wndclass.lpszMenuName  = NULL;
 
         if (RegisterClass(&wndclass))
