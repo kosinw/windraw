@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 #include <Windows.h>
+#include <windowsx.h>
 #include <queue>
 
 #include <windraw/window/event.hpp>
@@ -52,7 +53,7 @@ namespace wd
         {
             if (m_windowStyles & Style::Titlebar)
             {
-                winStyles |= WS_CAPTION | WS_MINIMIZEBOX;
+                winStyles |= WS_OVERLAPPED | WS_MINIMIZEBOX;
             }
             if (m_windowStyles & Style::Resize)
             {
@@ -143,7 +144,7 @@ namespace wd
 
             delete m_canvasHandle;
             m_canvasHandle = nullptr;
-
+        
             CoUninitialize();
         }
 
@@ -164,7 +165,7 @@ namespace wd
             if (!result)
             {
                 return false;
-            }
+        }
 
             dimensions.width  = static_cast<float>(boundingBox.right - boundingBox.left);
             dimensions.height = static_cast<float>(boundingBox.bottom - boundingBox.top);
@@ -180,7 +181,6 @@ namespace wd
         if (m_windowHandle)
         {
             RECT boundingBox;
-            ZeroMemory(&boundingBox, sizeof(boundingBox));
 
             BOOL result = GetWindowRect(m_windowHandle, &boundingBox);
 
@@ -345,7 +345,7 @@ namespace wd
     {
         MSG message;
 
-        while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
+        if (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&message);
             DispatchMessageW(&message);
@@ -398,8 +398,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseDown;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::LEFT;
 
             if (wParam & MK_CONTROL)
@@ -426,8 +426,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseDown;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::RIGHT;
 
             if (wParam & MK_CONTROL)
@@ -454,8 +454,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseDown;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::MIDDLE;
 
             if (wParam & MK_CONTROL)
@@ -482,8 +482,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseRelease;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::LEFT;
 
             if (wParam & MK_CONTROL)
@@ -510,8 +510,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseRelease;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::RIGHT;
 
             if (wParam & MK_CONTROL)
@@ -538,8 +538,8 @@ namespace wd
             Event ev;
 
             ev.type      = Event::MouseRelease;
-            ev.mouse.x   = static_cast<float>(LOWORD(lParam));
-            ev.mouse.y   = static_cast<float>(HIWORD(lParam));
+            ev.mouse.x   = static_cast<float>(GET_X_LPARAM(lParam));
+            ev.mouse.y   = static_cast<float>(GET_Y_LPARAM(lParam));
             ev.mouse.mod = Event::MouseEvent::MIDDLE;
 
             if (wParam & MK_CONTROL)

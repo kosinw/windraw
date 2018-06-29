@@ -32,7 +32,7 @@ namespace wd
     class Window
     {
     public:
-        /**
+		/**
 		 * @brief Construct a new Window object.
 		 * 
 		 * @param spec Dimensions + color depth of window
@@ -46,7 +46,7 @@ namespace wd
         Window(const Window &)       = delete;
         Window(Window &&)            = delete;
 
-        /**
+		/**
 		 * @brief Creates a window handle and shows it,
 		 * if the window class is not initialized, it is initialized here.
 		 * 
@@ -55,7 +55,7 @@ namespace wd
 		 */
         bool init();
 
-        /**
+		/**
 		 * @brief Destroys the window handle if it was initialized,
 		 * also destroys the GraphicsContext if it was initialized.
 		 * 
@@ -64,28 +64,28 @@ namespace wd
 		 */
         bool destroy();
 
-        /**
+		/**
 		 * @brief Return the dimensions of the window.
 		 * 
 		 * @return Size2 width and height of the window.
 		 */
         bool getDimensions(Size2 &dimensions);
 
-        /**
+		/**
 		 * @brief Return the position of the window.
 		 * 
 		 * @param position Position of window
 		 */
         bool getSize(Size2 &position);
 
-        /**
+		/**
 		 * @brief Returns the position of the mouse cursor.
 		 * 
 		 * @return Vector2f Position of mouse cursor.
 		 */
         Vector2f getMousePosition();
 
-        /**
+		/**
 		 * @brief Return the visibility of the window.
 		 * 
 		 * @return true If the window is being displayed.
@@ -93,7 +93,7 @@ namespace wd
 		 */
         bool isVisible();
 
-        /**
+		/**
 		 * @brief Returns if the window is still open.
 		 * 
 		 * @return true If the window hasn't been destroyed.
@@ -101,7 +101,7 @@ namespace wd
 		 */
         bool isOpen() const;
 
-        /**
+		/**
 		 * @brief Attempts to hide the window.
 		 * 
 		 * @return true If the window was hidden successfully.
@@ -109,7 +109,7 @@ namespace wd
 		 */
         bool hide();
 
-        /**
+		/**
 		 * @brief Attempts to show the window.
 		 * 
 		 * @return true If the window was shown sucessfully.
@@ -117,7 +117,7 @@ namespace wd
 		 */
         bool show();
 
-        /**
+		/**
 		 * @brief Checks the event queue and returns the event on the top.
 		 * 
 		 * @param event Outputs event type and args 
@@ -126,7 +126,7 @@ namespace wd
 		 */
         bool pollEvent(Event &event);
 
-        /**
+		/**
 		 * @brief Waits until a certain type of event has appeared in the event queue.
 		 * 
 		 * @param event Outputs event type and args
@@ -136,7 +136,7 @@ namespace wd
 		 */
         bool waitEvent(Event &event, const Event::EventType &eventType);
 
-        /**
+		/**
 		 * @brief Checks the event queue. If blocking, then wait until next event. If not, then just continue execution.
 		 * 
 		 * @param event Outputs event type and args
@@ -146,14 +146,14 @@ namespace wd
 		 */
         bool popEvent(Event &event, bool blocking);
 
-        /**
+		/**
 		 * @brief Returns the handle to the current window.
 		 * 
 		 * @return WindowHandle* Handle to current window
 		 */
         const WindowHandle getWindowHandle() const;
 
-        /**
+		/**
 		 * @brief Returns the handle to the canvas. Use this to draw
 		 * 
 		 * @return CanvasHandle 
@@ -161,7 +161,7 @@ namespace wd
         const CanvasHandle getCanvasHandle() const;
 
     private:
-        /**
+		/**
 		 * @brief Registers the window class
 		 * 
 		 * @return true If the window class registered successfully
@@ -169,7 +169,7 @@ namespace wd
 		 */
         static bool registerWindowClass();
 
-        /**
+		/**
 		 * @brief Window procedure needed for WinAPI.
 		 * 
 		 * @param handle A handle to a window.
@@ -180,13 +180,13 @@ namespace wd
 		 */
         static LRESULT CALLBACK windowProcedure(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
 
-        /**
+		/**
 		 * @brief Runs main event loop of WinAPI when called.
 		 * 
 		 */
         void runMainLoop();
 
-        /**
+		/**
 		 * @brief Handles windows events by reading the message loop.
 		 * 
 		 * @param message Type of event.

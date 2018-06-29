@@ -80,7 +80,7 @@ namespace wd
                 renderProps,
                 hwndRenderProps,
                 &m_renderTarget);
-            
+
             // For some odd reason it doesn't map pixels 1 : 1 unless this is sets
             m_renderTarget->SetDpi(96.0f, 96.0f);
 
@@ -103,6 +103,7 @@ namespace wd
         if (hr == D2DERR_RECREATE_TARGET)
         {
             SafeRelease(&m_renderTarget);
+            m_renderTarget = nullptr;
 
             if (!m_solidBrushes.empty())
             {
@@ -113,6 +114,45 @@ namespace wd
 
                 m_solidBrushes.clear();
             }
+        }
+    }
+
+    void Canvas::draw(const EllipseShape &shape)
+    {
+        ID2D1SolidColorBrush *brush;
+
+        if (m_solidBrushes.count(shape.color))
+        {
+            brush = m_solidBrushes[shape.color];
+        }
+
+        else
+        {
+            D2D1_COLOR_F color = D2D1::ColorF(shape.color.r, shape.color.g, shape.color.b);
+
+            m_renderTarget->CreateSolidColorBrush(
+                color,
+                &brush);
+
+            m_solidBrushes[shape.color] = brush;
+        }
+
+        Vector2f position = shape.position;
+        float    radius   = shape.radius;
+
+        D2D1_ELLIPSE ellipse = D2D1::Ellipse(
+            D2D1::Point2F(position.x, position.y),
+            radius,
+            radius);
+
+        if (shape.filled)
+        {
+            m_renderTarget->FillEllipse(ellipse, brush);
+        }
+
+        else
+        {
+            m_renderTarget->DrawEllipse(ellipse, brush);
         }
     }
 
@@ -152,7 +192,33 @@ namespace wd
         else
         {
             m_renderTarget->DrawRectangle(rect, brush);
+        }        
+    }
+
+    void Canvas::draw(const LineShape& shape)
+    {
+        ID2D1SolidColorBrush *brush;
+
+        if (m_solidBrushes.count(shape.color))
+        {
+            brush = m_solidBrushes[shape.color];
         }
+
+        else
+        {
+            D2D1_COLOR_F color = D2D1::ColorF(shape.color.r, shape.color.g, shape.color.b);
+
+            m_renderTarget->CreateSolidColorBrush(
+                color,
+                &brush);
+
+            m_solidBrushes[shape.color] = brush;
+        }
+
+        D2D1_POINT_2F pointA = D2D1::Point2F(shape.start.x, shape.start.y);
+        D2D1_POINT_2F pointB = D2D1::Point2F(shape.end.x, shape.end.y);
+
+        m_renderTarget->DrawLine(pointA, pointB, brush);        
     }
 
     void Canvas::resizeRenderTarget(const Size2 &newSize)
